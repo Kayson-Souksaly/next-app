@@ -2,6 +2,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { ReactNode } from "react";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 // (optional) next/font imports...
 
 export const metadata: Metadata = {
@@ -11,9 +13,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning data-theme="winter">
       <body className={/* inter.className or undefined */ undefined}>
-        {children}
+        <div className="flex flex-col min-h-screen max-w-[900px] mx-auto bg-white text-sm">
+          <Header />
+          {children}
+          <Footer />
+        </div>
       </body>
     </html>
   );

@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@tailwind utilities;
+@plugin "daisyui" {
+  themes: winter;
+}
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -16,5 +20,4 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  padding: 1rem;
 }
