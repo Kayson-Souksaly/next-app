@@ -1,4 +1,4 @@
-// app/posts/[id]/loading.tsx
+// app/posts/[id]/comments/loading.tsx
 export default function Loading() {
   return (
     <div className="min-h-[80vh] flex justify-center items-center flex-col">

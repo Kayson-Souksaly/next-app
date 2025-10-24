@@ -1,4 +1,4 @@
-// app/posts/[id]/error.tsx
+// app/posts/[id]/comments/error.tsx
 "use client";
 
 const Error = ({ error }: { error: Error }) => {
