@@ -1,7 +1,6 @@
 // app/posts/[id]/comments/page.tsx
 import Image from "next/image";
-import { Comments } from "../../../types/types";
-import BackBtn from "@/app/components/BackBtn";
+import { Comments } from "@/types/types";
 
 const getComments = async (id: string) => {
   const res = await fetch(`https://dummyjson.com/posts/${id}/comments`, {
@@ -50,8 +49,6 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
             </div>
           ))
         )}
-
-        <BackBtn />
       </main>
     </>
   );

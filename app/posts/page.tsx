@@ -1,13 +1,16 @@
+// app/posts/page.tsx
 import Link from "next/link";
 import React from "react";
-import { Post } from "../types/types";
+import { Post } from "@/types/types";
+import { notFound } from "next/navigation";
 
 const PostsPage = async () => {
   const res = await fetch("https://dummyjson.com/posts", {
-    next: { revalidate: 60 }, // optional: revalidate every 60s
+    next: { revalidate: 60 },
   });
+  if (res.status === 404) return notFound();
   const data = await res.json();
-  const posts: Post[] = data.posts; // ✅ access the array
+  const posts: Post[] = data.posts;
 
   return (
     <div className="pt-12">
