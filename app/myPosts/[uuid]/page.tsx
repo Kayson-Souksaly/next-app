@@ -5,16 +5,19 @@ import { formatDate } from "@/lib/formatDate";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 
+export const revalidate = 60;
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ uuid: string }>;
 }) {
   const { uuid } = await params;
-  const post = await prisma.post.findFirstOrThrow({
-    where: { uuid: uuid },
-  });
-  return { title: `${post.title} • My Posts` };
+  const post = await prisma.post.findUnique({ where: { uuid: uuid } });
+  return {
+    title: `${post?.title ?? "Post"} • My Posts`,
+    description: post?.content?.slice(0, 120) ?? "Post details",
+  };
 }
 
 export async function generateStaticParams() {

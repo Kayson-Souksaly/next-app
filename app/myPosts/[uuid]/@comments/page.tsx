@@ -3,10 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 
-export async function generateStaticParams() {
-  const posts = await prisma.post.findMany({ select: { uuid: true } });
-  return posts.map((p) => ({ uuid: p.uuid }));
-}
+export const revalidate = 60;
 
 const page = async ({ params }: { params: Promise<{ uuid: string }> }) => {
   const { uuid } = await params;
