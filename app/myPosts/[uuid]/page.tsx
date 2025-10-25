@@ -1,10 +1,9 @@
 // app/posts/[id]/page.tsx
 
 import BackBtn from "@/app/components/BackBtn";
-import { PrismaClient } from "@prisma/client";
+import { formatDate } from "@/lib/formatDate";
+import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
-
-const prisma = new PrismaClient();
 
 export async function generateMetadata({
   params,
@@ -16,6 +15,11 @@ export async function generateMetadata({
     where: { uuid: uuid },
   });
   return { title: `${post.title} • My Posts` };
+}
+
+export async function generateStaticParams() {
+  const posts = await prisma.post.findMany({ select: { uuid: true } });
+  return posts.map((p) => ({ uuid: p.uuid }));
 }
 
 const PostPage = async ({ params }: { params: Promise<{ uuid: string }> }) => {
@@ -36,12 +40,12 @@ const PostPage = async ({ params }: { params: Promise<{ uuid: string }> }) => {
 
           <p>
             <span className="font-bold">Created at:</span>{" "}
-            {post.createdAt.toLocaleDateString()}
+            {formatDate(post.createdAt)}
           </p>
 
           <p>
             <span className="font-bold">Update at:</span>{" "}
-            {post.updatedAt.toLocaleDateString()}
+            {formatDate(post.updatedAt)}
           </p>
           <p className="mt-4 text-gray-700">{post.content}</p>
         </section>

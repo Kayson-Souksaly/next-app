@@ -1,8 +1,12 @@
 // app/posts/[id]/comments/page.tsx
-import { PrismaClient } from "@prisma/client";
+
+import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 
-const prisma = new PrismaClient();
+export async function generateStaticParams() {
+  const posts = await prisma.post.findMany({ select: { uuid: true } });
+  return posts.map((p) => ({ uuid: p.uuid }));
+}
 
 const page = async ({ params }: { params: Promise<{ uuid: string }> }) => {
   const { uuid } = await params;
