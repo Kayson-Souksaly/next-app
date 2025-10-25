@@ -1,20 +1,14 @@
 // app/posts/[id]/comments/page.tsx
+import { PrismaClient } from "@prisma/client";
 import Image from "next/image";
-import { Comments } from "@/types/types";
 
-const getComments = async (id: string) => {
-  const res = await fetch(`https://dummyjson.com/posts/${id}/comments`, {
-    next: { revalidate: 60 },
+const prisma = new PrismaClient();
+
+const page = async ({ params }: { params: Promise<{ uuid: string }> }) => {
+  const { uuid } = await params;
+  const comments = await prisma.comments.findMany({
+    where: { postUuid: uuid },
   });
-  if (!res.ok) throw new Error("Failed to fetch comments");
-  const data = await res.json();
-  const comments: Comments[] = data.comments;
-  return comments;
-};
-
-const page = async ({ params }: { params: Promise<{ id: string }> }) => {
-  const { id } = await params;
-  const comments = await getComments(id);
 
   return (
     <>
@@ -23,7 +17,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
           <p className="text-gray-500 text-center text-2xl">No comments yet.</p>
         ) : (
           comments.map((comment) => (
-            <div key={comment.id} className="border my-4 p-4">
+            <div key={comment.uuid} className="border my-4 p-4">
               <div className="flex gap-2">
                 {/* Stand in for profile image */}
                 <Image
@@ -34,12 +28,10 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
                   className="rounded-full"
                   priority
                 />
-                <h1 className="text-xl capitalize font-bold">
-                  {comment.user.username}
-                </h1>
+                <h1 className="text-xl capitalize font-bold">{comment.user}</h1>
               </div>
 
-              <p>{comment.body}</p>
+              <p>{comment.content}</p>
 
               <p>
                 <span className="font-bold">Likes:</span> {comment.likes}

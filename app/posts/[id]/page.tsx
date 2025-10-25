@@ -3,7 +3,6 @@
 import BackBtn from "@/app/components/BackBtn";
 import { Post } from "@/types/types";
 import { notFound } from "next/navigation";
-import { ReactNode } from "react";
 
 const getPost = async (id: string) => {
   const res = await fetch(`https://dummyjson.com/posts/${id}`, {
@@ -14,13 +13,19 @@ const getPost = async (id: string) => {
   return (await res.json()) as Post;
 };
 
-const PostPage = async ({
+export async function generateMetadata({
   params,
-  comments,
 }: {
   params: Promise<{ id: string }>;
-  comments: ReactNode;
-}) => {
+}) {
+  const { id } = await params;
+  const post = await fetch(`https://dummyjson.com/posts/${id}`).then((r) =>
+    r.json()
+  );
+  return { title: `${post.title} • Posts` };
+}
+
+const PostPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
   const post = await getPost(id);
 

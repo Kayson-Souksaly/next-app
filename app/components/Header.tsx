@@ -24,6 +24,9 @@ const Header = () => {
           <Link href="/posts">Posts</Link>
         </li>
         <li>
+          <Link href="/myPosts">My Posts</Link>
+        </li>
+        <li>
           <Link href="/users">Users</Link>
         </li>
       </ul>
